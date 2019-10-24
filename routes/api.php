@@ -14,7 +14,7 @@ use Illuminate\Http\Request;
 */
 
 Route::post('register', 'PassportController@register');
-Route::get('show', 'PassportController@show');
+Route::post('login','PassportController@login');
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();

@@ -25,10 +25,24 @@ class PassportController extends Controller
         return response()->json(['token' => $token], 200);
     }
 
-
-    public function show()
+    public function login(Request $req)
     {
-        return 'great';
+       $creadentials = [
+           'email' => $req->email,
+           'password' => $req->password
+       ];
+       
+       if(auth()->attempt($creadentials) ){
+           $token = auth()->user()->createToken('TutsForWeb')->accessToken;
+           return response()->json(['token' => $token], 200);
+       }else{
+           return response()->json(['error' => 'UnAuthorized Denied'], 401);
+       }
     }
+
+    
+
+
+    
 
 }
