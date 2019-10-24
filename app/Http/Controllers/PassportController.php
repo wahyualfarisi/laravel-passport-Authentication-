@@ -12,16 +12,18 @@ class PassportController extends Controller
         $this->validate($req, [
             'name'  => 'required',
             'email' => 'required|email|unique:users',
-            'password' => 'required|min:6'
+            'password' => 'required|min:6',
+            'role' => 'required'
         ]);
 
         $user = User::create([
             'name' => $req->name,
             'email' => $req->email,
-            'password' => bcrypt($req->password)
+            'password' => bcrypt($req->password),
+            'role' => $req->role
         ]);
 
-        $token = $user->createToken('TutsForWeb')->accessToken;
+        $token = $user->createToken('APP')->accessToken;
         return response()->json(['token' => $token], 200);
     }
 
@@ -33,14 +35,21 @@ class PassportController extends Controller
        ];
        
        if(auth()->attempt($creadentials) ){
-           $token = auth()->user()->createToken('TutsForWeb')->accessToken;
+           $token = auth()->user()->createToken('APP')->accessToken;
            return response()->json(['token' => $token], 200);
        }else{
            return response()->json(['error' => 'UnAuthorized Denied'], 401);
        }
     }
 
+    public function details()
+    {
+        return response()->json(['user' => auth()->user()], 200);
+        
+    }
     
+
+
 
 
     
